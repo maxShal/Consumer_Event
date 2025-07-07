@@ -1,4 +1,4 @@
-package com.example.event;
+package com.example.web;
 
 public enum EventStatus {
     WAIT_START,

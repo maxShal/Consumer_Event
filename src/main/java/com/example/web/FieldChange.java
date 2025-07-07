@@ -1,5 +1,8 @@
-package com.example.event;
+package com.example.web;
 
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Setter
 @Getter
