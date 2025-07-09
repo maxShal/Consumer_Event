@@ -45,6 +45,9 @@ public KafkaChangeEvent(List<Long> users, Long ownerId, Long changedById) {
     this.changedById = changedById;
 }*/
 
+    public EventEntity() {
+    }
+
     public EventEntity(Long eventId, List<Long> users, Long ownerId, Long changedById, FieldChange<String> name, FieldChange<Integer> maxPlaces, FieldChange<LocalDateTime> date, FieldChange<Integer> cost, FieldChange<Integer> duration, FieldChange<Long> locationId, FieldChange<EventStatus> status) {
         this.eventId = eventId;
         this.users = users;
