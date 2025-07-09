@@ -29,6 +29,8 @@ public class EventEntity {
 
     private FieldChange<String> name;
     private FieldChange<Integer> maxPlaces;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
     private FieldChange<LocalDateTime> date;
     private FieldChange<Integer> cost;
     private FieldChange<Integer> duration;
@@ -55,6 +57,7 @@ public KafkaChangeEvent(List<Long> users, Long ownerId, Long changedById) {
         this.duration = duration;
         this.locationId = locationId;
         this.status = status;
+        //this.createdAt = LocalDateTime.now();
     }
 
 }

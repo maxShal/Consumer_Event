@@ -4,6 +4,8 @@ package com.example.web;
 import com.example.business.Event;
 import com.example.business.EventService;
 import com.example.mapper.EventMapper;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,7 @@ public class EventController {
         this.service = service;
     }
 
+    @GetMapping
     public List<EventResponseDto> getEvent()
     {
         return service.getEvent().stream()
@@ -28,6 +31,7 @@ public class EventController {
                 .toList();
     }
 
+    @PostMapping
     public List<Long> readEvent(List<KafkaChangeEvent> dto)
     {
         List<Event> events = dto.stream().map(mapper::toModel).toList();
