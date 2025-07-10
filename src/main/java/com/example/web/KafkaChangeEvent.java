@@ -1,4 +1,4 @@
-package com.example.event;
+package com.example.web;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -49,3 +49,4 @@ public class KafkaChangeEvent {
         this.status = status;
     }
 }
+
