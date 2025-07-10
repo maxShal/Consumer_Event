@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,10 +39,9 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Long>> readNotifications(@AuthenticationPrincipal Jwt jwt)
-    {
+    public ResponseEntity<Void> readNotifications(@AuthenticationPrincipal Jwt jwt, @RequestBody NotificationRequest request) {
         Long userId = Long.valueOf(jwt.getClaim("sub").toString());
-        List<Long> ids = service.readNotifications(userId);
-        return new ResponseEntity<>(ids, HttpStatus.OK);
+        service.readNotifications(userId, request.getNotificationIds());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -25,9 +25,9 @@ public class EventService {
                 .toList();
     }
 
-    public List<Long> readNotifications(Long userId)
-    {
-        List<EventChangeNotificationEntity> entities = repository.findByIsReadFalseAndUserId(userId);
-        return  entities.stream().map(EventChangeNotificationEntity::getEventId).toList();
+    public void readNotifications(Long userId, List<Long> notificationIds) {
+        List<EventChangeNotificationEntity> entities = repository.findByEventIdIn(notificationIds);
+        entities.forEach(entity -> entity.setRead(true));
+        repository.saveAll(entities);
     }
 }
