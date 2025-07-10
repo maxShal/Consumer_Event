@@ -1,7 +1,8 @@
 package com.example.business;
 
+import com.example.db.EventChangeNotificationEntity;
 import com.example.db.EventRepository;
-import com.example.mapper.EventMapper;
+import com.example.mapper.NotificationMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,26 +11,23 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository repository;
-    private final EventMapper mapper;
+    private final NotificationMapper mapper;
 
-    public EventService(EventRepository repository, EventMapper mapper) {
+    public EventService(EventRepository repository, NotificationMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }
 
-    public List<Event> getEvent()
+    public List<EventChangeNotification> getNotifications(Long useId)
     {
-        return repository.findAll().stream()
+        return repository.findByIsReadFalseAndUserId(useId).stream()
                 .map(mapper::toModel)
                 .toList();
     }
 
-    public List<Long> readEvent(List<Event> events)
+    public List<Long> readNotifications(Long userId)
     {
-        events.forEach(event -> event.setRead(true));
-        repository.saveAll(events.stream().map(mapper::toEntity).toList());
-        return events.stream()
-            .map(Event::getEventId)
-            .toList();
+        List<EventChangeNotificationEntity> entities = repository.findByIsReadFalseAndUserId(userId);
+        return  entities.stream().map(EventChangeNotificationEntity::getEventId).toList();
     }
 }

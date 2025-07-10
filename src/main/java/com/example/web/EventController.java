@@ -1,40 +1,51 @@
 package com.example.web;
 
 
-import com.example.business.Event;
+import com.example.business.EventChangeNotification;
 import com.example.business.EventService;
-import com.example.mapper.EventMapper;
+import com.example.exceptoin.ErrorMessageResponse;
+import com.example.mapper.NotificationMapper;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/notifications")
 public class EventController {
 
-    private final EventMapper mapper;
+    private final NotificationMapper mapper;
     private final EventService service;
 
-    public EventController(EventMapper mapper, EventService service) {
+    public EventController(NotificationMapper mapper, EventService service) {
         this.mapper = mapper;
         this.service = service;
     }
 
     @GetMapping
-    public List<EventResponseDto> getEvent()
+    public ResponseEntity<List<EventChangeNotificationDto>> getNotifications(@AuthenticationPrincipal Jwt jwt)
     {
-        return service.getEvent().stream()
-                .map(mapper::toRespDto)
-                .toList();
+
+        Long userId = Long.valueOf(jwt.getClaim("sub").toString());
+        List<EventChangeNotification> notifications = service.getNotifications(userId);
+        return new ResponseEntity<>(notifications.stream().map(mapper::toDto).toList(), HttpStatus.OK);
     }
 
     @PostMapping
-    public List<Long> readEvent(List<KafkaChangeEvent> dto)
+    public ResponseEntity<List<Long>> readNotifications(@AuthenticationPrincipal Jwt jwt)
     {
-        List<Event> events = dto.stream().map(mapper::toModel).toList();
-         return service.readEvent(events);
+        Long userId = Long.valueOf(jwt.getClaim("sub").toString());
+        List<Long> ids = service.readNotifications(userId);
+        return new ResponseEntity<>(ids, HttpStatus.OK);
     }
 }

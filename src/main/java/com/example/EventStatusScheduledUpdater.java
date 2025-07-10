@@ -21,7 +21,7 @@ public class EventStatusScheduledUpdater {
         this.eventRepository = eventRepository;
     }
 
-    @Scheduled(cron = "${event.stats.cron}")
+    @Scheduled(cron = "${eventChangeNotification.stats.cron}")
     public void deleteEvent(){
         log.info("EventStatusScheduledUpdater started");
         LocalDateTime cutoff = LocalDateTime.now().minusDays(7);
